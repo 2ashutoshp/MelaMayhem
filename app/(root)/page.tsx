@@ -2,8 +2,17 @@ import { Button } from "@/components/ui/button";
 import hero from "../../public/assets/images/hero2.gif";
 import Image from "next/image";
 import Link from "next/link";
+import Collection from "@/components/shared/Collection";
+import { getAllEvents } from "@/lib/actions/event.actions";
 
-export default function Home() {
+export default async function Home() {
+  const events = await getAllEvents({
+    query: '',
+    category: '',
+    page: 1,
+    limit: 6
+  });
+
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
@@ -30,16 +39,23 @@ export default function Home() {
           />
         </div>
       </section>
-      <section
-        id="events"
-        className="wrapper my-8 flex flex-col gap-8 md:gap-12"
-      >
-        <h2 className="h2-bold">
-          Connecting Celebrators <br /> with Celebration Makers!
-        </h2>
+      <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
+        <h2 className="h2-bold">Trust by <br /> Thousands of Events</h2>
+
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          Search CategoryFilter
+          {/* <Search />
+          <CategoryFilter /> */}
         </div>
+
+        <Collection 
+          data={events?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come back later"
+          collectionType="All_Events"
+          limit={6}
+          page={1}
+          totalPages={events?.totalPages}
+        />
       </section>
     </>
   );
